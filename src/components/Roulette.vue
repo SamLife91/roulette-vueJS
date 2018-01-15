@@ -429,7 +429,6 @@ export default {
   },
   methods: {
     chooseType: function () {
-      console.log('tes')
       if (this.userName && this.userCredit) {
         this.statusBar = true
         this.stepOne = true
@@ -438,7 +437,6 @@ export default {
     },
     betValid: function (data) {
       if (this.bet <= this.userCredit && data !== null) {
-        console.log('tru')
         return true
       }
     },
