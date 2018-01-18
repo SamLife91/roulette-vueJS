@@ -465,10 +465,10 @@ export default {
         this.initGame()
         let randomNumber = this.randomNumberGenerator()
         this.resultNumber = this.numbersArr[randomNumber].value
-        this.drawNumberType = this.oddOrEven(this.resultNumber)
+        this.drawNumberType = this.oddOrEvenHelper(this.resultNumber)
         console.log(this.drawNumberType)
         if (this.selectNumberType === this.drawNumberType) {
-          this.won(1.50)
+          this.won(1.15)
         } else {
           this.lose()
         }
@@ -481,9 +481,9 @@ export default {
         this.initGame()
         let randomNumber = this.randomNumberGenerator()
         this.resultNumber = this.numbersArr[randomNumber].value
-        this.drawHighLow = this.highOrLow(this.resultNumber)
+        this.drawHighLow = this.highOrLowHelper(this.resultNumber)
         if (this.selectHighLow === this.drawHighLow) {
-          this.won(1.50)
+          this.won(1.15)
         } else {
           this.lose()
         }
@@ -523,7 +523,7 @@ export default {
       let max = 36
       return Math.floor(Math.random() * (max - min + 1)) + min
     },
-    oddOrEven: function (number) {
+    oddOrEvenHelper: function (number) {
       console.log(number)
       if (number % 2 === 0) {
         return 'even'
@@ -531,7 +531,7 @@ export default {
         return 'odd'
       }
     },
-    highOrLow: function (number) {
+    highOrLowHelper: function (number) {
       if (number > 18) {
         return 'high'
       } else {
@@ -631,7 +631,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;
@@ -647,14 +646,11 @@ li {
 a {
   color: #42b983;
 }
-.step1 {
- /* min-height: 100px;
-  background:green;*/
-}
 .clearfix {
   float: none;
   clear: both;
 }
 .navbar-text {
-  float: right;}
+  float: right;
+}
 </style>
