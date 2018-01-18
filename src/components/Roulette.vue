@@ -41,7 +41,7 @@
       <section class="section step1 jumbotron col-sm-10" v-show="stepOne">
 
         <div class="col-xs-12">
-          <div class="col-xs-4 col-sm-4">
+          <div class="col-xs-12 col-sm-4">
             <div class="thumbnail">
               <img src="../assets/br.jpg" alt="" class="card-image-top">
               <div class="caption">
@@ -56,7 +56,7 @@
             </div>
           </div>
 
-          <div class="col-xs-4 col-sm-4">
+          <div class="col-xs-12 col-sm-4">
             <div class="thumbnail">
               <img src="../assets/br.jpg" alt="" class="card-image-top">
               <div class="caption">
@@ -71,7 +71,7 @@
             </div>
           </div>
 
-          <div class="col-xs-4 col-sm-4">
+          <div class="col-xs-12 col-sm-4">
             <div class="thumbnail">
               <img src="../assets/br.jpg" alt="" class="card-image-top">
               <div class="caption">
@@ -86,7 +86,7 @@
             </div>
           </div>
 
-          <div class="col-xs-4 col-sm-4">
+          <div class="col-xs-12 col-sm-4">
             <div class="thumbnail">
               <img src="../assets/br.jpg" alt="" class="card-image-top">
               <div class="caption">
@@ -101,7 +101,7 @@
             </div>
           </div>
 
-          <div class="col-xs-4 col-sm-4">
+          <div class="col-xs-12 col-sm-4">
             <div class="thumbnail">
               <img src="../assets/br.jpg" alt="" class="card-image-top">
               <div class="caption">
