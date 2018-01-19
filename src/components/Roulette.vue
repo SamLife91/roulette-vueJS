@@ -12,7 +12,7 @@
               <strong>{{userName}}</strong>
               <i class="glyphicon glyphicon-credit-card"></i>
               <strong>{{userCredit}}</strong>
-              <button class="btn-danger" @click="checkOut()">End</button>
+              <button class="btn-danger btn-sm" @click="checkOut()">End</button>
             </p>
           </div>
         </div>
@@ -20,371 +20,421 @@
     </header>
 
     <div class="main container">
-      <section class="section step0 jumbotron col-sm-10" v-show="stepZero">
-        <div class="form-group col-xs-12 col-sm-6">
-          <label for="">Name:</label>
-          <input type="text" class="form-control" v-model="userName">
-        </div>
-        <div class="form-group col-xs-12 col-sm-6">
-          <label for="">Enter Credit:</label>
-          <input type="text" class="form-control" v-model.number="userCredit">
-        </div>
-        <p v-if="userName && userCredit">
-          Your name is <strong>{{userName}}</strong> and you enter the game with <strong>{{userCredit}}</strong> Credit
-        </p>
-        <div class="form-group col-xs-12">
-          <button class="btn btn-primary col-xs-12" @click="chooseType()">Confirm</button>
-        </div>
-        <div class="clearfix"></div>
-      </section>
-
-      <section class="section step1 jumbotron col-sm-10" v-show="stepOne">
-
-        <div class="col-xs-12">
-          <div class="col-xs-12 col-sm-4">
-            <div class="thumbnail">
-              <img src="../assets/br.jpg" alt="" class="card-image-top">
-              <div class="caption">
-                <h4 class="bet_type_title">
-                  Red/Black
-                </h4>
-                <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:48.8%">48.8%
-                </div>
-                <button class="btn btn-primary col-xs-12" @click="initGameType(redOrBlackGame=true)">Play</button>
-              </div>
-              <div class="clearfix"></div>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-4">
-            <div class="thumbnail">
-              <img src="../assets/br.jpg" alt="" class="card-image-top">
-              <div class="caption">
-               <h4 class="bet_type_title">
-                 Odd/Even
-               </h4>
-               <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:48.8%">48.8%
-               </div>
-               <button class="btn btn-primary col-xs-12" @click="initGameType(evenOrOddGame=true)">Play</button> 
-              </div>
-              <div class="clearfix"></div>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-4">
-            <div class="thumbnail">
-              <img src="../assets/br.jpg" alt="" class="card-image-top">
-              <div class="caption">
-                <h4 class="bet_type_title">
-                  High/Low
-                </h4>
-                <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:48.8%">48.8%
-                </div>
-                <button class="btn btn-primary col-xs-12" @click="initGameType(highOrLowGame=true)">Play</button>    
-              </div>
-              <div class="clearfix"></div>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-4">
-            <div class="thumbnail">
-              <img src="../assets/br.jpg" alt="" class="card-image-top">
-              <div class="caption">
-                <h4 class="bet_type_title">
-                  Columns
-                </h4>
-                <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:32.40%">32.40%
-                </div>
-                <button class="btn btn-primary col-xs-12" @click="initGameType(columnsGame=true)">Play</button>    
-              </div>
-              <div class="clearfix"></div>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-4">
-            <div class="thumbnail">
-              <img src="../assets/br.jpg" alt="" class="card-image-top">
-              <div class="caption">
-                <h4 class="bet_type_title">
-                  Dozens
-                </h4>
-                <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:32.40%">32.40%
-                </div>
-                <button class="btn btn-primary col-xs-12" @click="initGameType(dozensGame=true)">Play</button>
-              </div>
-              <div class="clearfix"></div>
-            </div>
-          </div>
-        </div>
-        <button class="btn-danger col-xs-12 hidden">back</button>
-      </section>
-
-      <section v-if="redOrBlackGame" class="jumbotron col-sm-10">
-        <h4>Red or Black</h4>
-        <div class="col-xs-12" v-if="entryBet">
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Type bet amount</label>
-            <input type="number" class="form-control" v-model.number="bet">
-          </div>
-          <div class="form-group-addon hidden">
-            <input type="radio" id="selectRed" value="red" v-model="selectedColor">
-            <label for="selectRed">Red</label>
-            <br>
-            <input type="radio" id="selectBlack" value="black" v-model="selectedColor">
-            <label for="selectBlack">Black</label>
-            <br>
+      <transition name="fade">
+        <section class="section step0 jumbotron col-sm-10" v-show="stepZero">
+          <div class="alert alert-danger" v-if="creditAlert">
+            <strong>Danger!</strong> incorect username or credit ammount.
           </div>
           <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Choose Color</label>
-            <select name="" id="" v-model="selectedColor" class="form-control">
-              <option value="null" selected>Choose</option>
-              <option value="red">Red</option>
-              <option value="black">Black</option>
-            </select>
+            <label for="">Name:</label>
+            <input type="text" class="form-control" v-model="userName">
           </div>
+          <div class="form-group col-xs-12 col-sm-6">
+            <label for="">Enter Credit:</label>
+            <input type="number" class="form-control" v-model.number="userCredit">
+          </div>
+          <p v-if="userName && userCredit">
+            Your name is <strong>{{userName}}</strong> and you enter the game with <strong>{{userCredit}}</strong> Credit
+          </p>
           <div class="form-group col-xs-12">
-            <button class="btn-primary col-xs-12" @click="colorGame()">play</button>
-          </div>  
-        </div>
-        <div class="col-xs-12" v-if="result">
-          <p class="col-xs-12">
-            Your Bet: {{selectedColor}}
-          </p>
-          <p class="col-xs-12">
-            Draw: {{resultNumber}} - {{resultColor}}
-          </p>
-          <p class="col-xs-12">
-            {{gameResult}}
-          </p>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-primary col-xs-12" @click="playAgain()">Play Again</button>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-danger col-xs-12" @click="checkOut()">End</button>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-      </section>
-
-      <section v-if="evenOrOddGame" class="jumbotron col-sm-10">
-        <div class="col-xs-12" v-if="entryBet">
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Type bet amount</label>
-            <input type="number" class="form-control" v-model.number="bet" number>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Even or Odd bet</label>
-            <select name="" id="" class="form-control" v-model="selectNumberType">
-              <option value="null" selected>Choose</option>
-              <option value="even">Even</option>
-              <option value="odd">Odd</option>
-            </select></div>
-          <div class="form-group col-xs-12">
-            <button class="btn-primary col-xs-12" @click="evenOddGame()">play</button>
-          </div>  
-        </div>
-        <div class="col-xs-12" v-if="result">
-          <p class="col-xs-12">
-            Your Bet: {{selectNumberType}}
-          </p>
-          <p class="col-xs-12">
-            Draw: {{resultNumber}} - {{drawNumberType}}
-          </p>
-          <p class="col-xs-12">
-            {{gameResult}}
-          </p>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-primary col-xs-12" @click="playAgain()">Play Again</button>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-danger col-xs-12" @click="checkOut()">End</button>
-          </div>
-        </div>
-      </section>
-
-      <section v-if="highOrLowGame" class="jumbotron col-sm-10">
-        <div class="col-xs-12" v-if="entryBet">
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Type bet amount</label>
-            <input type="number" class="form-control" v-model.number="bet">
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">High or Low</label>
-            <select name="" id="" class="form-control" v-model="selectHighLow">
-              <option value="null" selected>Choose</option>
-              <option value="high">High</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-          <div class="form-group col-xs-12">
-            <button class="btn-primary col-xs-12" @click="highLowGame()">play</button>
-          </div>
-        </div>
-        <div class="col-xs-12" v-if="result">
-          <p class="col-xs-12">
-            Your Bet: {{selectHighLow}}
-          </p>
-          <p class="col-xs-12">
-            Draw: {{resultNumber}}
-          </p>
-          <p class="col-xs-12">
-            {{gameResult}}
-          </p>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-primary col-xs-12" @click="playAgain()">Play Again</button>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-danger col-xs-12" @click="checkOut()">End</button>
-          </div>
-        </div>
-      </section>
-
-      <section v-if="columnsGame" class="jumbotron col-sm-10">
-        <div class="col-xs-12" v-if="entryBet">
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Type bet amount</label>
-            <input type="number" class="form-control" v-model.number="bet" number>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Choose column</label>
-            <select name="" id="" class="form-control" v-model="selectColumn">
-              <option value="null" selected>Choose</option>
-              <option value="1">1:[ 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]</option>
-              <option value="2">2:[ 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]</option>
-              <option value="3">3:[ 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]</option>
-            </select>
-          </div>
-          <div class="form-group col-xs-12">
-            <button class="btn-primary col-xs-12" @click="columnGame()">play</button>
-          </div>
-        </div>
-        <div class="col-xs-12" v-if="result">
-          <p class="col-xs-12">
-            Your Bet: {{selectColumn}} 
-            <span v-show="selectColumn == 1">[ 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]</span>
-            <span v-show="selectColumn == 2">[ 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]</span>
-            <span v-show="selectColumn == 3">[ 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]</span>
-          </p>
-          <p class="col-xs-12">
-            Draw: {{resultNumber}} is from {{betColumn}}
-          </p>
-          <p class="col-xs-12">
-            {{gameResult}}
-          </p>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-primary col-xs-12" @click="playAgain()">Play Again</button>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-danger col-xs-12" @click="checkOut()">End</button>
-          </div>
-        </div>
-      </section>
-
-      <section v-if="dozensGame" class="jumbotron col-sm-10">
-        <div class="col-xs-12" v-if="entryBet">
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Type bet amount</label>
-            <input type="number" class="form-control" v-model.number="bet" number>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <label for="">Choose Dozen column</label>
-            <select name="" id="" class="form-control" v-model="selectDozen">
-              <option value="null">Choose</option>
-              <option value="1">1:[ 1 - 12 ]</option>
-              <option value="2">2:[ 13 - 24 ]</option>
-              <option value="3">3:[ 25 - 36 ]</option>
-            </select>
-          </div>
-          <div class="form-group col-xs-12">
-            <button class="btn-primary col-xs-12" @click="dozenGame()">play</button>
-          </div>
-        </div>
-        <div class="col-xs-12" v-if="result">
-          <p class="col-xs-12">
-            Your Bet: {{selectDozen}}
-          </p>
-          <p class="col-xs-12">
-            Draw: {{resultNumber}}
-          </p>
-          <p class="col-xs-12">
-            {{gameResult}}
-          </p>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-primary col-xs-12" @click="playAgain()">Play Again</button>
-          </div>
-          <div class="form-group col-xs-12 col-sm-6">
-            <button class="btn-danger col-xs-12" @click="checkOut()">End</button>
-          </div>
-        </div>
-      </section>
-
-      <aside class="col-sm-2" v-if="checkout == false">
-        <div class="col-xs-12 panel">
-          <p class="col-xs-12">
-            <span class="col-xs-12 badge">
-              {{userName}}
-            </span>
-          </p>
-          <p class="col-xs-12">
-            Games:
-            <span class="col-xs-12 badge">
-              {{gamesCounter}}
-            </span>
-          </p>
-          <p class="col-xs-12">
-            Wins:
-            <span class="col-xs-12 badge">
-              {{gameWinCounter}}
-            </span>
-          </p>
-          <p class="col-xs-12">
-            Loses:
-            <span class="col-xs-12 badge">
-            {{gameLoseCounter}}
-            </span>
-          </p>
-          <p class="col-xs-12">
-            Credit:
-            <span class="col-xs-12 badge">
-              {{userCredit}}
-            </span>
-          </p>
-          <div class="clearfix"></div>
-        </div>
-      </aside>
-
-      <section v-if="checkout" class="col-xs-12 col-sm-12">
-        <div class="col-xs-12">
-          <h2>End game stats</h2>
-          <table class="table table-striped">
-            <tr>
-              <td>Name:</td>
-              <td>{{userName}}</td>
-            </tr>
-            <tr>
-              <td>Games:</td>
-              <td>{{gamesCounter}}</td>
-            </tr>
-            <tr>
-              <td>Wins:</td>
-              <td>{{gameWinCounter}}</td>
-            </tr>
-            <tr>
-              <td>Loses:</td>
-              <td>{{gameLoseCounter}}</td>
-            </tr>
-          </table>
-          <div class="col-xs-12" v-for="(game, index) in gamesHistory">
-            Game #{{index + 1}} - {{game}}
-          </div>
-          <div class="form-group col-xs-12">
-            <a href="/">
-              <button class="btn-success col-xs-12">New Game</button>
-            </a>
+            <button class="btn-lg btn-primary col-xs-12" @click="chooseType()">Confirm</button>
           </div>
           <div class="clearfix"></div>
-        </div>
-      </section>
+        </section>        
+      </transition> 
+
+      <transition name="fade">
+        <section class="section step1 jumbotron col-sm-10" v-show="stepOne">
+          <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-4">
+              <div class="thumbnail">
+                <img src="../assets/br.jpg" alt="" class="card-image-top">
+                <div class="caption">
+                  <h4 class="bet_type_title">
+                    Red/Black
+                  </h4>
+                  <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:48.8%">48.8%
+                  </div>
+                  <button class="btn-lg btn-primary col-xs-12" @click="initGameType(redOrBlackGame=true)">Play</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+              <div class="thumbnail">
+                <img src="../assets/br.jpg" alt="" class="card-image-top">
+                <div class="caption">
+                 <h4 class="bet_type_title">
+                   Odd/Even
+                 </h4>
+                 <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:48.8%">48.8%
+                 </div>
+                 <button class="btn-lg btn-primary col-xs-12" @click="initGameType(evenOrOddGame=true)">Play</button> 
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+              <div class="thumbnail">
+                <img src="../assets/br.jpg" alt="" class="card-image-top">
+                <div class="caption">
+                  <h4 class="bet_type_title">
+                    High/Low
+                  </h4>
+                  <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:48.8%">48.8%
+                  </div>
+                  <button class="btn-lg btn-primary col-xs-12" @click="initGameType(highOrLowGame=true)">Play</button>    
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+              <div class="thumbnail">
+                <img src="../assets/br.jpg" alt="" class="card-image-top">
+                <div class="caption">
+                  <h4 class="bet_type_title">
+                    Columns
+                  </h4>
+                  <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:32.40%">32.40%
+                  </div>
+                  <button class="btn-lg btn-primary col-xs-12" @click="initGameType(columnsGame=true)">Play</button>    
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+              <div class="thumbnail">
+                <img src="../assets/br.jpg" alt="" class="card-image-top">
+                <div class="caption">
+                  <h4 class="bet_type_title">
+                    Dozens
+                  </h4>
+                  <div class="form-group progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:32.40%">32.40%
+                  </div>
+                  <button class="btn-lg btn-primary col-xs-12" @click="initGameType(dozensGame=true)">Play</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </section>
+      </transition>      
+      
+      <transition name="fade">
+        <section v-if="redOrBlackGame" class="jumbotron col-sm-10">
+          <h4>Red or Black</h4>
+          <div class="col-xs-12" v-if="entryBet">
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Type bet amount</label>
+              <select class="form-control" v-model.number="bet">
+                <option value="null" selected>Choose bet</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+               </select> 
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Choose Color</label>
+              <select v-model="selectedColor" class="form-control">
+                <option value="null" selected>Choose</option>
+                <option value="red">Red</option>
+                <option value="black">Black</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-12">
+              <button class="btn-primary btn-lg col-xs-12" @click="colorGame()">play</button>
+            </div>  
+          </div>
+          <div class="col-xs-12" v-if="result">
+            <p class="col-xs-12">
+              Your Bet: {{selectedColor}}
+            </p>
+            <p class="col-xs-12">
+              Draw: {{resultNumber}} - {{resultColor}}
+            </p>
+            <p class="col-xs-12">
+              {{gameResult}}
+            </p>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-primary btn-lg col-xs-12" @click="playAgain()">Play Again</button>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-danger btn-lg col-xs-12" @click="checkOut()">End</button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </section>
+      </transition>
+
+      <transition name="fade">
+        <section v-if="evenOrOddGame" class="jumbotron col-sm-10">
+          <div class="col-xs-12" v-if="entryBet">
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Type bet amount</label>
+              <select class="form-control" v-model.number="bet">
+                <option value="null" selected>Choose bet</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+               </select>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Even or Odd bet</label>
+              <select name="" id="" class="form-control" v-model="selectNumberType">
+                <option value="null" selected>Choose</option>
+                <option value="even">Even</option>
+                <option value="odd">Odd</option>
+              </select></div>
+            <div class="form-group col-xs-12">
+              <button class="btn-primary btn-lg col-xs-12" @click="evenOddGame()">play</button>
+            </div>  
+          </div>
+          <div class="col-xs-12" v-if="result">
+            <p class="col-xs-12">
+              Your Bet: {{selectNumberType}}
+            </p>
+            <p class="col-xs-12">
+              Draw: {{resultNumber}} - {{drawNumberType}}
+            </p>
+            <p class="col-xs-12">
+              {{gameResult}}
+            </p>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-primary btn-lg col-xs-12" @click="playAgain()">Play Again</button>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-danger btn-lg col-xs-12" @click="checkOut()">End</button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </section>
+      </transition>
+
+      <transition name="fade">
+        <section v-if="highOrLowGame" class="jumbotron col-sm-10">
+          <div class="col-xs-12" v-if="entryBet">
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Type bet amount</label>
+              <select class="form-control" v-model.number="bet">
+                <option value="null" selected>Choose bet</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+               </select>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">High or Low</label>
+              <select name="" id="" class="form-control" v-model="selectHighLow">
+                <option value="null" selected>Choose</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-12">
+              <button class="btn-primary btn-lg col-xs-12" @click="highLowGame()">play</button>
+            </div>
+          </div>
+          <div class="col-xs-12" v-if="result">
+            <p class="col-xs-12">
+              Your Bet: {{selectHighLow}}
+            </p>
+            <p class="col-xs-12">
+              Draw: {{resultNumber}}
+            </p>
+            <p class="col-xs-12">
+              {{gameResult}}
+            </p>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-primary btn-lg col-xs-12" @click="playAgain()">Play Again</button>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-danger btn-lg col-xs-12" @click="checkOut()">End</button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </section>
+      </transition>
+
+      <transition name="fade">
+        <section v-if="columnsGame" class="jumbotron col-sm-10">
+          <div class="col-xs-12" v-if="entryBet">
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Type bet amount</label>
+              <select class="form-control" v-model.number="bet">
+                <option value="null" selected>Choose bet</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Choose column</label>
+              <select name="" id="" class="form-control" v-model="selectColumn">
+                <option value="null" selected>Choose</option>
+                <option value="1">1:[ 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]</option>
+                <option value="2">2:[ 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]</option>
+                <option value="3">3:[ 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-12">
+              <button class="btn-primary btn-lg col-xs-12" @click="columnGame()">play</button>
+            </div>
+          </div>
+          <div class="col-xs-12" v-if="result">
+            <p class="col-xs-12">
+              Your Bet: {{selectColumn}} 
+              <span v-show="selectColumn == 1">[ 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]</span>
+              <span v-show="selectColumn == 2">[ 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]</span>
+              <span v-show="selectColumn == 3">[ 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]</span>
+            </p>
+            <p class="col-xs-12">
+              Draw: {{resultNumber}} is from {{betColumn}}
+            </p>
+            <p class="col-xs-12">
+              {{gameResult}}
+            </p>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-primary btn-lg col-xs-12" @click="playAgain()">Play Again</button>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-danger btn-lg col-xs-12" @click="checkOut()">End</button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </section>
+      </transition>
+
+      <transition name="fade">
+        <section v-if="dozensGame" class="jumbotron col-sm-10">
+          <div class="col-xs-12" v-if="entryBet">
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Type bet amount</label>
+              <select class="form-control" v-model.number="bet">
+                <option value="null" selected>Choose bet</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <label for="">Choose Dozen column</label>
+              <select name="" id="" class="form-control" v-model="selectDozen">
+                <option value="null">Choose</option>
+                <option value="1">1:[ 1 - 12 ]</option>
+                <option value="2">2:[ 13 - 24 ]</option>
+                <option value="3">3:[ 25 - 36 ]</option>
+              </select>
+            </div>
+            <div class="form-group col-xs-12">
+              <button class="btn-primary btn-lg col-xs-12" @click="dozenGame()">play</button>
+            </div>
+          </div>
+          <div class="col-xs-12" v-if="result">
+            <p class="col-xs-12">
+              Your Bet: {{selectDozen}}
+            </p>
+            <p class="col-xs-12">
+              Draw: {{resultNumber}}
+            </p>
+            <p class="col-xs-12">
+              {{gameResult}}
+            </p>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-primary btn-lg col-xs-12" @click="playAgain()">Play Again</button>
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+              <button class="btn-danger btn-lg col-xs-12" @click="checkOut()">End</button>
+            </div>
+          </div>
+        </section>
+      </transition>
+
+      <transition name="fade">
+        <aside class="col-sm-2" v-if="checkout == false">
+          <div class="col-xs-12 panel">
+            <p class="col-xs-12">
+              <span class="col-xs-12 badge">
+                {{userName}}
+              </span>
+            </p>
+            <p class="col-xs-12">
+              Games:
+              <span class="col-xs-12 badge">
+                {{gamesCounter}}
+              </span>
+            </p>
+            <p class="col-xs-12">
+              Wins:
+              <span class="col-xs-12 badge">
+                {{gameWinCounter}}
+              </span>
+            </p>
+            <p class="col-xs-12">
+              Loses:
+              <span class="col-xs-12 badge">
+              {{gameLoseCounter}}
+              </span>
+            </p>
+            <p class="col-xs-12">
+              Credit:
+              <span class="col-xs-12 badge">
+                {{userCredit}}
+              </span>
+            </p>
+            <div class="clearfix"></div>
+          </div>
+        </aside>
+      </transition>
+
+      <transition name="fade">
+        <section v-if="checkout" class="col-xs-12 col-sm-12">
+          <div class="col-xs-12">
+            <h2>End game stats</h2>
+            <table class="table table-striped">
+              <tr>
+                <td>Name:</td>
+                <td>{{userName}}</td>
+              </tr>
+              <tr>
+                <td>Games:</td>
+                <td>{{gamesCounter}}</td>
+              </tr>
+              <tr>
+                <td>Wins:</td>
+                <td>{{gameWinCounter}}</td>
+              </tr>
+              <tr>
+                <td>Loses:</td>
+                <td>{{gameLoseCounter}}</td>
+              </tr>
+            </table>
+            <div class="col-xs-12" v-for="(game, index) in gamesHistory">
+              Game #{{index + 1}} - {{game}}
+            </div>
+            <div class="form-group col-xs-12">
+              <a href="/">
+                <button class="btn-success btn-lg col-xs-12">New Game</button>
+              </a>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </section>  
+      </transition>
 
     </div>
     <footer class="footer"></footer>
@@ -424,15 +474,19 @@ export default {
       drawHighLow: null,
       betColumn: null,
       checkout: false,
-      gamesHistory: []
+      gamesHistory: [],
+      creditAlert: false
     }
   },
   methods: {
     chooseType: function () {
-      if (this.userName && this.userCredit) {
+      if (this.userName && this.userCredit > 0) {
         this.statusBar = true
         this.stepOne = true
         this.stepZero = false
+        this.creditAlert = false
+      } else {
+        this.creditAlert = true
       }
     },
     betValid: function (data) {

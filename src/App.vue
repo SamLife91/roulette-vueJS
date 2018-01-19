@@ -19,4 +19,10 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.fade-enter-active {
+  transition: opacity .8s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 </style>
